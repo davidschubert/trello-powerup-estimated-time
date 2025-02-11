@@ -33,7 +33,7 @@ TrelloPowerUp.initialize({
             },
         ];
     },
-    /*"card-detail-badges": function (t, options) {
+    "card-detail-badges": function (t, options) {
         console.log("card-detail-badges wird aufgerufen.");
         return t
             .get("card", "private", "estimatedTime")
@@ -51,5 +51,5 @@ TrelloPowerUp.initialize({
                     },
                 ];
             });
-    },*/
+    },
 });
