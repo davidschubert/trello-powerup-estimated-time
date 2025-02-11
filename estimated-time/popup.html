@@ -27,7 +27,7 @@
         <script>
             var t = TrelloPowerUp.iframe();
 
-            // Falls bereits ein Wert gespeichert wurde, diesen vorab in das Eingabefeld setzen
+            // If a value is already stored, prefill the input field
             t.get("card", "private", "estimatedTime").then(function (
                 estimatedTime
             ) {
@@ -42,10 +42,10 @@
                 .addEventListener("click", function () {
                     var value =
                         document.getElementById("estimatedTimeInput").value;
-                    // Speichert den eingegebenen Wert in den privaten Kartendaten
+                    // Save the entered value in the card's private storage
                     t.set("card", "private", "estimatedTime", value).then(
                         function () {
-                            // Schließt das Popup nach dem Speichern
+                            // Close the popup after saving
                             t.closePopup();
                         }
                     );

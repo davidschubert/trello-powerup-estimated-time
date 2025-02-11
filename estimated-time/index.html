@@ -11,23 +11,23 @@
             var Promise = TrelloPowerUp.Promise;
 
             TrelloPowerUp.initialize({
-                // Definiert einen Button in der Kartendetailansicht
+                // Adds a button in the card detail view
                 "card-buttons": function (t, options) {
                     return [
                         {
-                            icon: "https://example.com/path/to/icon.png", // Ersetze diese URL durch dein eigenes Icon (HTTPS)
+                            icon: "https://example.com/path/to/icon.png", // Replace this with your own HTTPS icon URL
                             text: "Set Estimated Time",
                             callback: function (t) {
                                 return t.popup({
                                     title: "Estimated Time",
-                                    url: "./popup.html", // Pfad zum Popup
-                                    height: 150, // Höhe des Popups in Pixel
+                                    url: "./popup.html", // Relative path to the popup
+                                    height: 150, // Height of the popup in pixels
                                 });
                             },
                         },
                     ];
                 },
-                // Zeigt in der Kartenansicht ein Badge mit der geschätzten Zeit an
+                // Shows a badge with the estimated time on the card
                 "card-detail-badges": function (t, options) {
                     return t
                         .get("card", "private", "estimatedTime")
@@ -38,7 +38,7 @@
                             return [
                                 {
                                     title: "Estimated Time",
-                                    text: estimatedTime + "h", // Zeigt z.B. "2h" an
+                                    text: estimatedTime + "h", // For example, "2h"
                                     color: "blue",
                                 },
                             ];
