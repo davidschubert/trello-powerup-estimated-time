@@ -8,37 +8,46 @@
     </head>
     <body>
         <script>
-            var Promise = TrelloPowerUp.Promise;
+            console.log("Power-Up Script gestartet.");
 
             TrelloPowerUp.initialize({
-                // Adds a button in the card detail view
+                // Button in der Kartenansicht
                 "card-buttons": function (t, options) {
+                    console.log("card-buttons wird aufgerufen.");
                     return [
                         {
-                            icon: "https://example.com/path/to/icon.png", // Replace this with your own HTTPS icon URL
+                            icon: "https://trello-powerups.hawaii.studio/estimated-time/icon.png",
                             text: "Set Estimated Time",
                             callback: function (t) {
+                                console.log(
+                                    "Button wurde geklickt. Öffne Popup."
+                                );
                                 return t.popup({
                                     title: "Estimated Time",
-                                    url: "./popup.html", // Relative path to the popup
-                                    height: 150, // Height of the popup in pixels
+                                    url: "./popup.html", // Relativer Pfad zur popup.html
+                                    height: 150,
                                 });
                             },
                         },
                     ];
                 },
-                // Shows a badge with the estimated time on the card
+                // Badge in der Kartenansicht
                 "card-detail-badges": function (t, options) {
+                    console.log("card-detail-badges wird aufgerufen.");
                     return t
                         .get("card", "private", "estimatedTime")
                         .then(function (estimatedTime) {
                             if (!estimatedTime) {
+                                console.log("Kein Estimated Time gesetzt.");
                                 return [];
                             }
+                            console.log(
+                                "Estimated Time gefunden: " + estimatedTime
+                            );
                             return [
                                 {
                                     title: "Estimated Time",
-                                    text: estimatedTime + "h", // For example, "2h"
+                                    text: estimatedTime + "h",
                                     color: "blue",
                                 },
                             ];
