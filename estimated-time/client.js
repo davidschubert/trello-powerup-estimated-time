@@ -4,14 +4,15 @@ TrelloPowerUp.initialize({
             {
                 icon: "https://cdn.glitch.com/1b42d7fe-bda8-4af8-a6c8-eff0cea9e08a%2Frocket-ship.png?1494946700421",
                 text: "Estimated Time",
-                /*condition: "always",
+                //condition: "always",
                 callback: function (t) {
-                    return t.popup({
+                    return t.card().then((card) => alert(`Hello world!`));
+                    /*return t.popup({
                         title: "Estimated Time",
                         url: "popup.html",
                         height: 150,
-                    });
-                },*/
+                    });*/
+                },
             },
         ];
     },
