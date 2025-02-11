@@ -1,0 +1,14 @@
+{
+    "name": "Estimated Time",
+    "details": "Add estimated time to cards",
+    "icon": {
+        "url": "https://trello-powerups.hawaii.studio/estimated-time/icon.png"
+    },
+    "author": "Hawaii Studio",
+    "capabilities": ["card-buttons", "card-detail-badges"],
+    "connectors": {
+        "iframe": {
+            "url": "https://trello-powerups.hawaii.studio/estimated-time/index.html"
+        }
+    }
+}
