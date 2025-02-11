@@ -16,15 +16,12 @@
                     console.log("card-buttons wird aufgerufen.");
                     return [
                         {
-                            icon: "https://trello-powerups.hawaii.studio/estimated-time/icon.png",
-                            text: "Set Estimated Time",
+                            text: "⏱️ Estimated Time",
+                            condition: "always",
                             callback: function (t) {
-                                console.log(
-                                    "Button wurde geklickt. Öffne Popup."
-                                );
                                 return t.popup({
-                                    title: "Estimated Time",
-                                    url: "./popup.html", // Relativer Pfad zur popup.html
+                                    title: "⏱️ Estimated Time",
+                                    url: "popup.html",
                                     height: 150,
                                 });
                             },
@@ -46,7 +43,7 @@
                             );
                             return [
                                 {
-                                    title: "Estimated Time",
+                                    title: "⏱️ Estimated Time",
                                     text: estimatedTime + "h",
                                     color: "blue",
                                 },
