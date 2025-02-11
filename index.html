@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Estimated Time Power-Up</title>
+        <!-- Trello Power-Up Client Library -->
+        <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    </head>
+    <body>
+        <script>
+            var Promise = TrelloPowerUp.Promise;
+
+            TrelloPowerUp.initialize({
+                // Definiert einen Button in der Kartendetailansicht
+                "card-buttons": function (t, options) {
+                    return [
+                        {
+                            icon: "https://example.com/path/to/icon.png", // Ersetze diese URL durch dein eigenes Icon (HTTPS)
+                            text: "Set Estimated Time",
+                            callback: function (t) {
+                                return t.popup({
+                                    title: "Estimated Time",
+                                    url: "./popup.html", // Pfad zum Popup
+                                    height: 150, // Höhe des Popups in Pixel
+                                });
+                            },
+                        },
+                    ];
+                },
+                // Zeigt in der Kartenansicht ein Badge mit der geschätzten Zeit an
+                "card-detail-badges": function (t, options) {
+                    return t
+                        .get("card", "private", "estimatedTime")
+                        .then(function (estimatedTime) {
+                            if (!estimatedTime) {
+                                return [];
+                            }
+                            return [
+                                {
+                                    title: "Estimated Time",
+                                    text: estimatedTime + "h", // Zeigt z.B. "2h" an
+                                    color: "blue",
+                                },
+                            ];
+                        });
+                },
+            });
+        </script>
+    </body>
+</html>

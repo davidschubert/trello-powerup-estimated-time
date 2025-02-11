@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Set Estimated Time</title>
+        <script src="https://p.trellocdn.com/power-up.min.js"></script>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
+            input {
+                font-size: 16px;
+                padding: 5px;
+            }
+            button {
+                font-size: 16px;
+                padding: 5px 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <label for="estimatedTimeInput">Estimated Time (in hours):</label>
+        <input type="number" id="estimatedTimeInput" min="0" step="0.1" />
+        <button id="saveButton">Save</button>
+
+        <script>
+            var t = TrelloPowerUp.iframe();
+
+            // Falls bereits ein Wert gespeichert wurde, diesen vorab in das Eingabefeld setzen
+            t.get("card", "private", "estimatedTime").then(function (
+                estimatedTime
+            ) {
+                if (estimatedTime) {
+                    document.getElementById("estimatedTimeInput").value =
+                        estimatedTime;
+                }
+            });
+
+            document
+                .getElementById("saveButton")
+                .addEventListener("click", function () {
+                    var value =
+                        document.getElementById("estimatedTimeInput").value;
+                    // Speichert den eingegebenen Wert in den privaten Kartendaten
+                    t.set("card", "private", "estimatedTime", value).then(
+                        function () {
+                            // Schließt das Popup nach dem Speichern
+                            t.closePopup();
+                        }
+                    );
+                });
+        </script>
+    </body>
+</html>
