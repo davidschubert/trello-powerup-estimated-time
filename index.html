@@ -1,50 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <meta charset="utf-8" />
-        <title>Estimated Time Power-Up</title>
-        <!-- Trello Power-Up Client Library -->
-        <script src="https://p.trellocdn.com/power-up.min.js"></script>
+        <meta charset="UTF-8" />
+        <title>Trello Estimated Time Power-Up by Hawaii Studio</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 40px;
+                line-height: 1.6;
+            }
+            a {
+                color: #0066cc;
+            }
+        </style>
     </head>
     <body>
-        <script>
-            var Promise = TrelloPowerUp.Promise;
-
-            TrelloPowerUp.initialize({
-                // Definiert einen Button in der Kartendetailansicht
-                "card-buttons": function (t, options) {
-                    return [
-                        {
-                            icon: "https://example.com/path/to/icon.png", // Ersetze diese URL durch dein eigenes Icon (HTTPS)
-                            text: "Set Estimated Time",
-                            callback: function (t) {
-                                return t.popup({
-                                    title: "Estimated Time",
-                                    url: "./popup.html", // Pfad zum Popup
-                                    height: 150, // Höhe des Popups in Pixel
-                                });
-                            },
-                        },
-                    ];
-                },
-                // Zeigt in der Kartenansicht ein Badge mit der geschätzten Zeit an
-                "card-detail-badges": function (t, options) {
-                    return t
-                        .get("card", "private", "estimatedTime")
-                        .then(function (estimatedTime) {
-                            if (!estimatedTime) {
-                                return [];
-                            }
-                            return [
-                                {
-                                    title: "Estimated Time",
-                                    text: estimatedTime + "h", // Zeigt z.B. "2h" an
-                                    color: "blue",
-                                },
-                            ];
-                        });
-                },
-            });
-        </script>
+        <h1>Trello Estimated Time Power-Up by Hawaii Studio</h1>
+        <p>
+            This project provides a free Trello Power-Up that adds an "Estimated
+            Time" field to your Trello cards.
+        </p>
+        <p>
+            The Power-Up files are organized in a subfolder
+            (<code>/estimated-time/</code>). You can view the source code there
+            or integrate the Power-Up directly into Trello.
+        </p>
+        <p>
+            For more information and instructions, please check out the
+            repository details.
+        </p>
     </body>
 </html>
