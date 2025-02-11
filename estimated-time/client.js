@@ -1,23 +1,21 @@
 TrelloPowerUp.initialize({
-    // Button in der Kartenansicht
     "card-buttons": function (t, options) {
-        console.log("card-buttons wird aufgerufen.");
         return [
             {
+                icon: "https://cdn.glitch.com/1b42d7fe-bda8-4af8-a6c8-eff0cea9e08a%2Frocket-ship.png?1494946700421",
                 text: "⏱️ Estimated Time",
-                condition: "always",
+                /*condition: "always",
                 callback: function (t) {
                     return t.popup({
                         title: "⏱️ Estimated Time",
                         url: "popup.html",
                         height: 150,
                     });
-                },
+                },*/
             },
         ];
     },
-    // Badge in der Kartenansicht
-    "card-detail-badges": function (t, options) {
+    /*"card-detail-badges": function (t, options) {
         console.log("card-detail-badges wird aufgerufen.");
         return t
             .get("card", "private", "estimatedTime")
@@ -35,5 +33,5 @@ TrelloPowerUp.initialize({
                     },
                 ];
             });
-    },
+    },*/
 });
