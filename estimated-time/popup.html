@@ -2,54 +2,228 @@
 <html>
     <head>
         <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Set Estimated Time</title>
         <script src="https://p.trellocdn.com/power-up.min.js"></script>
         <style>
             body {
                 font-family: Arial, sans-serif;
                 margin: 20px;
+                color: #172B4D;
+            }
+            .container {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 10px;
+            }
+            label {
+                margin-bottom: 5px;
+                font-weight: bold;
             }
             input {
                 font-size: 16px;
-                padding: 5px;
+                padding: 8px;
+                border-radius: 3px;
+                border: 1px solid #DFE1E6;
             }
             button {
                 font-size: 16px;
-                padding: 5px 10px;
+                padding: 8px 12px;
+                background-color: #0079BF;
+                color: white;
+                border: none;
+                border-radius: 3px;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+            }
+            button:hover {
+                background-color: #026AA7;
+            }
+            button:disabled {
+                background-color: #97A0AF;
+                cursor: not-allowed;
+            }
+            .loading {
+                display: none;
+                color: #5E6C84;
+                margin-top: 10px;
+            }
+            .error {
+                display: none;
+                color: #EB5A46;
+                margin-top: 10px;
+                padding: 8px;
+                background-color: #FFEAEF;
+                border-radius: 3px;
+            }
+            .tabs {
+                display: flex;
+                margin-bottom: 15px;
+                border-bottom: 1px solid #DFE1E6;
+            }
+            .tab {
+                padding: 8px 16px;
+                cursor: pointer;
+                border-bottom: 3px solid transparent;
+            }
+            .tab.active {
+                border-bottom: 3px solid #0079BF;
+                font-weight: bold;
+            }
+            .tab-content {
+                display: none;
+            }
+            .tab-content.active {
+                display: block;
             }
         </style>
     </head>
     <body>
-        <label for="estimatedTimeInput">Estimated Time (in hours):</label>
-        <input type="number" id="estimatedTimeInput" min="0" step="0.1" />
-        <button id="saveButton">Save</button>
+        <div class="container">
+            <div class="tabs">
+                <div class="tab active" data-tab="estimate">Estimated Time</div>
+                <div class="tab" data-tab="actual">Actual Time</div>
+            </div>
+            
+            <div id="estimate-tab" class="tab-content active">
+                <div class="form-group">
+                    <label for="estimatedTimeInput">Estimated Time (in hours):</label>
+                    <input type="number" id="estimatedTimeInput" min="0" step="0.1" />
+                </div>
+                <button id="saveEstimatedButton">Save Estimate</button>
+            </div>
+            
+            <div id="actual-tab" class="tab-content">
+                <div class="form-group">
+                    <label for="actualTimeInput">Actual Time (in hours):</label>
+                    <input type="number" id="actualTimeInput" min="0" step="0.1" />
+                </div>
+                <button id="saveActualButton">Save Actual Time</button>
+            </div>
+            
+            <div id="loading" class="loading">Saving...</div>
+            <div id="error" class="error">Error saving time estimate</div>
+        </div>
 
         <script>
             var t = TrelloPowerUp.iframe();
-
-            // If a value is already stored, prefill the input field
-            t.get("card", "private", "estimatedTime").then(function (
-                estimatedTime
-            ) {
-                if (estimatedTime) {
-                    document.getElementById("estimatedTimeInput").value =
-                        estimatedTime;
-                }
+            var loadingDiv = document.getElementById("loading");
+            var errorDiv = document.getElementById("error");
+            var estimatedInput = document.getElementById("estimatedTimeInput");
+            var actualInput = document.getElementById("actualTimeInput");
+            var saveEstimatedButton = document.getElementById("saveEstimatedButton");
+            var saveActualButton = document.getElementById("saveActualButton");
+            
+            // Tab switching
+            document.querySelectorAll('.tab').forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    document.querySelectorAll('.tab').forEach(function(t) {
+                        t.classList.remove('active');
+                    });
+                    // Hide all tab contents
+                    document.querySelectorAll('.tab-content').forEach(function(content) {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    // Show corresponding tab content
+                    document.getElementById(this.dataset.tab + '-tab').classList.add('active');
+                });
             });
 
-            document
-                .getElementById("saveButton")
-                .addEventListener("click", function () {
-                    var value =
-                        document.getElementById("estimatedTimeInput").value;
-                    // Save the entered value in the card's private storage
-                    t.set("card", "private", "estimatedTime", value).then(
-                        function () {
-                            // Close the popup after saving
-                            t.closePopup();
-                        }
-                    );
+            // Load saved values
+            t.get("card", "private", "estimatedTime")
+                .then(function (estimatedTime) {
+                    if (estimatedTime) {
+                        estimatedInput.value = estimatedTime;
+                    }
+                })
+                .catch(function(error) {
+                    console.error("Error loading estimated time:", error);
+                    showError("Error loading time estimate");
                 });
+                
+            t.get("card", "private", "actualTime")
+                .then(function (actualTime) {
+                    if (actualTime) {
+                        actualInput.value = actualTime;
+                    }
+                })
+                .catch(function(error) {
+                    console.error("Error loading actual time:", error);
+                });
+
+            // Helper functions
+            function showError(message) {
+                errorDiv.textContent = message;
+                errorDiv.style.display = "block";
+            }
+            
+            function validateInput(input) {
+                if (!input.value || isNaN(parseFloat(input.value)) || parseFloat(input.value) < 0) {
+                    showError("Please enter a valid positive number");
+                    return false;
+                }
+                return true;
+            }
+            
+            function saveTimeValue(key, value, button) {
+                loadingDiv.style.display = "block";
+                errorDiv.style.display = "none";
+                button.disabled = true;
+                
+                return t.set("card", "private", key, value)
+                    .then(function () {
+                        // If this was an estimate, also refresh card badges
+                        if (key === "estimatedTime") {
+                            return t.card("all")
+                                .then(function(card) {
+                                    return t.closePopup();
+                                });
+                        } else {
+                            return t.closePopup();
+                        }
+                    })
+                    .catch(function(error) {
+                        console.error("Error saving time:", error);
+                        loadingDiv.style.display = "none";
+                        showError("Error saving time value");
+                        button.disabled = false;
+                    });
+            }
+
+            // Save buttons
+            saveEstimatedButton.addEventListener("click", function () {
+                if (validateInput(estimatedInput)) {
+                    saveTimeValue("estimatedTime", estimatedInput.value, saveEstimatedButton);
+                }
+            });
+            
+            saveActualButton.addEventListener("click", function () {
+                if (validateInput(actualInput)) {
+                    saveTimeValue("actualTime", actualInput.value, saveActualButton);
+                }
+            });
+            
+            // Allow Enter key to submit
+            estimatedInput.addEventListener("keypress", function(e) {
+                if (e.key === "Enter" && validateInput(estimatedInput)) {
+                    saveTimeValue("estimatedTime", estimatedInput.value, saveEstimatedButton);
+                }
+            });
+            
+            actualInput.addEventListener("keypress", function(e) {
+                if (e.key === "Enter" && validateInput(actualInput)) {
+                    saveTimeValue("actualTime", actualInput.value, saveActualButton);
+                }
+            });
         </script>
     </body>
 </html>

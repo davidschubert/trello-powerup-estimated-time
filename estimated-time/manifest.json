@@ -5,7 +5,7 @@
         "url": "https://trello-powerups.hawaii.studio/estimated-time/icon.png"
     },
     "author": "Hawaii Studio",
-    "capabilities": ["card-buttons", "card-detail-badges"],
+    "capabilities": ["card-buttons", "card-detail-badges", "card-badges", "board-buttons"],
     "connectors": {
         "iframe": {
             "url": "https://trello-powerups.hawaii.studio/estimated-time/index.html"
